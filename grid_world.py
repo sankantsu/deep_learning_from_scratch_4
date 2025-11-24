@@ -61,11 +61,47 @@ def policy_iter(env: GridWorld, gamma: float) -> Strategy:
     return pi
 
 
+def value_iter_step(v: ValueF, env: GridWorld, gamma: float) -> ValueF:
+    v = v.copy()
+    for s in env.states():
+        if s == env.goal_state:
+            continue
+        action_values = []
+        for action in env.action_space:
+            next_state = env.next_state(s, action)
+            reward = env.reward(s, action, next_state)
+            value = reward + gamma * v[next_state]
+            action_values.append(value)
+        v[s] = max(action_values)
+    return v
+
+
+def value_iter(env: GridWorld, gamma: float) -> ValueF:
+    v = defaultdict(lambda: 0.0)
+
+    threshold = 0.001
+    while True:
+        env.render_v(v)
+        new_v = value_iter_step(v, env, gamma)
+
+        delta = 0
+        for s in env.states():
+            delta = max(delta, abs(new_v[s] - v[s]))
+        if delta < threshold:
+            break
+        v = new_v
+    return v
+
+
 def main() -> None:
     env = GridWorld()
     gamma = 0.9
 
-    policy_iter(env, gamma)
+    use_value_iter = False
+    if use_value_iter:
+        value_iter(env, gamma)
+    else:
+        policy_iter(env, gamma)
 
 
 if __name__ == "__main__":

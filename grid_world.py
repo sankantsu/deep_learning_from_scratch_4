@@ -31,15 +31,41 @@ def policy_eval(pi: Strategy, v: ValueF, env: GridWorld, gamma: float) -> ValueF
     return v
 
 
+def make_greedy_policy(v: ValueF, env: GridWorld, gamma: float) -> Strategy:
+    new_pi = defaultdict(lambda: {0: 0.0, 1: 0.0, 2: 0.0, 3: 0.0})
+    for s in env.states():
+        max_value = -1000000
+        best_action = -1
+        for action in env.action_space:
+            next_state = env.next_state(s, action)
+            r = env.reward(s, action, next_state)
+            val = r + gamma * v[next_state]
+            if val > max_value:
+                max_value = val
+                best_action = action
+        new_pi[s][best_action] = 1.0
+    return new_pi
+
+
+def policy_iter(env: GridWorld, gamma: float) -> Strategy:
+    pi = defaultdict(lambda: {0: 0.25, 1: 0.25, 2: 0.25, 3: 0.25})
+    v = defaultdict(lambda: 0.0)
+
+    while True:
+        env.render_v(v, pi)
+        v = policy_eval(pi, v, env, gamma)
+        new_pi = make_greedy_policy(v, env, gamma)
+        if new_pi == pi:
+            break
+        pi = new_pi
+    return pi
+
+
 def main() -> None:
     env = GridWorld()
     gamma = 0.9
 
-    pi = defaultdict(lambda: {0: 0.25, 1: 0.25, 2: 0.25, 3: 0.25})
-    v = defaultdict(lambda: 0.0)
-
-    v = policy_eval(pi, v, env, gamma)
-    env.render_v(v, pi)
+    policy_iter(env, gamma)
 
 
 if __name__ == "__main__":

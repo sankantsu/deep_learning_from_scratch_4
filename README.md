@@ -2,4 +2,11 @@
 
 ゼロから作るDeep Learning 4 - 強化学習編の実験コード置き場
 
-- `bandit.py`: バンディット問題 (Chapter. 1)
+## Chapter 1
+
+- `bandit.py`: バンディット問題
+
+## Chapter 4
+
+- `dp.py`: 2 状態モデルにおける状態価値関数の推定
+- `grid_world.py`: Grid 問題における状態価値関数の推定/方策反復法

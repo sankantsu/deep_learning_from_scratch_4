@@ -1,3 +1,4 @@
+import copy
 from collections import defaultdict
 from collections.abc import Mapping, MutableMapping
 from lib.gridworld import GridWorld
@@ -62,7 +63,7 @@ def policy_iter(env: GridWorld, gamma: float) -> Strategy:
 
 
 def value_iter_step(v: ValueF, env: GridWorld, gamma: float) -> ValueF:
-    v = v.copy()
+    v = copy.copy(v)
     for s in env.states():
         if s == env.goal_state:
             continue

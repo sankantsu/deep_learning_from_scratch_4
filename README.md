@@ -9,7 +9,7 @@
 ## Chapter 4
 
 - `dp.py`: 2 状態モデルにおける状態価値関数の推定
-- `grid_world.py`: Grid 問題における状態価値関数の推定/方策反復法
+- `grid_dp.py`: Grid 問題における状態価値関数の推定/方策反復法
 
 ## Chapter 5
 

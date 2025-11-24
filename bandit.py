@@ -29,7 +29,7 @@ class Agent:
             n_actions = len(self._Qs)
             return np.random.randint(0, n_actions)
         # Exploitation
-        return np.argmax(self._Qs)
+        return int(np.argmax(self._Qs))
 
 
 def play(bandit: Bandit, agent: Agent, n_steps: int) -> list[int]:

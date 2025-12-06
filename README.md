@@ -14,3 +14,7 @@
 ## Chapter 5
 
 - `mc.py`: Grid 問題をモンテカルロ法で解く
+
+## Chapter 6
+
+- `td_eval.py`: TD 法による状態価値関数の推定 (Grid 問題)

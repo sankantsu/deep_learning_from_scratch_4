@@ -18,3 +18,4 @@
 ## Chapter 6
 
 - `td_eval.py`: TD 法による状態価値関数の推定 (Grid 問題)
+- `sarsa.py`: SARSA 法による方策制御 (Grid 問題)

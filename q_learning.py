@@ -1,5 +1,6 @@
 from collections import defaultdict
 from collections.abc import MutableMapping
+from typing import cast
 import numpy as np
 from lib.gridworld import GridWorld
 
@@ -41,7 +42,7 @@ class Agent:
             return np.random.choice(self._n_actions)
         # Greedy
         qs = [self._Q[state, action] for action in range(self._n_actions)]
-        return np.argmax(qs)
+        return cast(Action, np.argmax(qs))
 
     def update(
         self, state: State, action: Action, reward: Reward, next_state: State

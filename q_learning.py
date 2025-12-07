@@ -1,4 +1,4 @@
-from collections import defaultdict, deque
+from collections import defaultdict
 from collections.abc import MutableMapping
 import numpy as np
 from lib.gridworld import GridWorld
@@ -28,27 +28,27 @@ class Agent:
     def __init__(self, n_actions: int) -> None:
         assert n_actions > 0
         p = 1 / n_actions
-        default_action_probs = {i: p for i in range(n_actions)}
 
         self._n_actions = n_actions
         self._gamma: float = 0.9
         self._alpha = 0.1
         self._eps = 0.2
         self._Q: MutableMapping[QKey, Score] = defaultdict(lambda: 0)
-        self._pi: MutableMapping[State, dict[Action, Prob]] = defaultdict(
-            lambda: default_action_probs
-        )
 
     def select_action(self, state: State) -> Action:
-        actions = list(self._pi[state].keys())
-        probs = list(self._pi[state].values())
-        return np.random.choice(actions, p=probs)
+        if np.random.rand() < self._eps:
+            # Exploration
+            return np.random.choice(self._n_actions)
+        # Greedy
+        qs = [self._Q[state, action] for action in range(self._n_actions)]
+        return np.argmax(qs)
 
-    def update(self, state: State, action: Action, reward: Reward, next_state: State) -> None:
+    def update(
+        self, state: State, action: Action, reward: Reward, next_state: State
+    ) -> None:
         next_q = max(self._Q[next_state, action] for action in range(self._n_actions))
         target = reward + self._gamma * next_q
         self._Q[state, action] += self._alpha * (target - self._Q[state, action])
-        self._pi[state] = make_eps_greedy_probs(self._Q, state, self._n_actions, self._eps)
 
     def reset(self) -> None:
         pass
